@@ -1,0 +1,76 @@
+I have performed this steps to complete the assaignment. Please refer that for each step how i performed.
+
+Step 1
+# Create virtual environment
+python -m venv venv
+
+# Activate it (Windows)
+venv\Scripts\activate
+
+
+
+Step 2: Install Dependencies
+pip install -r requirements.txt
+
+This will install:
+transformers (BERT models)
+torch (PyTorch)
+datasets
+scikit-learn
+numpy
+tqdm
+
+
+
+Step 3: Genearte Data (if not already there)
+python src/generate_data.py
+
+This creates:
+
+train.jsonl (800 examples)
+dev.jsonl (150 examples)
+test.jsonl (100 examples, no labels)
+
+
+
+Step 4: Train the Model
+python src/train.py --model_name prajjwal1/bert-tiny --train data/train.jsonl --dev data/dev.jsonl --out_dir out --epochs 6 --batch_size 24 --lr 3e-4 --dropout 0.2
+
+This trains for 6 epochs and saves the best model to out/
+
+
+Step 5: Run Predictions on Dev Set
+python src/predict.py --model_dir out --input data/dev.jsonl --output out/dev_pred.json
+
+This generates predictions with entity-specific confidence thresholds
+
+
+Step 6: Evaluate Dev Performance
+python src/eval_span_f1.py --gold data/dev.jsonl --pred out/dev_pred.json
+
+This shows:
+- Precision, Recall, F1
+- PII Precision (should be ≥ 0.80)
+- Per-entity metrics
+
+
+Step 7: Measure Latency
+python src/measure_latency.py --model_dir out --input data/test.jsonl
+
+This shows:
+- Mean latency
+- p50 latency
+- p95 latency (should be ≤ 20ms)
+
+
+Step 8: Generate Test Predictions
+python src/predict.py --model_dir out --input data/test.jsonl --output out/test_predictions.jsonl
+
+This creates the final submission file
+
+
+Final Results (Dataset):
+PII Precision: 0.8529 ≥ 0.80 ( ≥ 0.80 target)
+p95 Latency: 2.69ms ( ≤ 20ms target)
+Overall F1: 
+
