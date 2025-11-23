@@ -1,7 +1,7 @@
 APPROACH:
 - Used prajjwal1/bert-tiny (4.4M parameters) for fast CPU inference
 - Trained on 800 synthetic examples with realistic STT noise patterns (spelled-out numbers, "at"/"dot" for emails)
-- Dataset features Indian context: Indian names (raj kumar, priya sharma), cities (mumbai, bangalore), and locations (gateway of india, marine drive)
+- Dataset features: Nnames , cities, and locations etc..
 
 KEY OPTIMIZATIONS:
 1. Entity-specific confidence thresholds to maximize PII precision:
